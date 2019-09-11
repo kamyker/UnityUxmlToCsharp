@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace KS.UxmlToCsharp
 {
-    public static class Converter
+    static class Converter
     {
         [MenuItem("Assets/Uxml To C#/Create C# class", true)]
         static bool ValidateCreate()
@@ -18,7 +18,7 @@ namespace KS.UxmlToCsharp
         }
 
         [MenuItem("Assets/Uxml To C#/Create C# class")]
-        public static void Create()
+        static void Create()
         {
             CreateOrUpdateClass(Selection.activeObject as VisualTreeAsset);
 
@@ -59,7 +59,7 @@ namespace KS.UxmlToCsharp
         }
 
         [MenuItem("Assets/Uxml To C#/Update C# class")]
-        public static void UpdateClass()
+        static void UpdateClass()
         {
             var path = AssetDatabase.GetAssetPath(Selection.activeObject);
             var script = (MonoScript)Selection.activeObject;
@@ -112,7 +112,7 @@ namespace KS.UxmlToCsharp
             AssetDatabase.Refresh();
         }
 
-        public static void RecursiveFill(VisualElement element, ref Dictionary<string, Type> fields)
+        static void RecursiveFill(VisualElement element, ref Dictionary<string, Type> fields)
         {
             if (element.customStyle.TryGetValue(new CustomStyleProperty<string>("--csName"), out string name))
             {
@@ -123,26 +123,6 @@ namespace KS.UxmlToCsharp
             }
             foreach (var item in element.Children())
                 RecursiveFill(item, ref fields);
-        }
-    }
-
-    class ConvertedUxmlsUpdater : AssetPostprocessor
-    {
-        static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
-        {
-            foreach (string str in importedAssets)
-            {
-                if (Path.GetExtension(str).IndexOf("uxml", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                {
-                    var pathCs = str.Replace(".uxml", "Converted.cs");
-                    if (File.Exists(pathCs))
-                    {
-                        Debug.Log($"Updating: {pathCs}");
-                        Converter.CreateOrUpdateClass(AssetDatabase.
-                            LoadAssetAtPath(str, typeof(VisualTreeAsset)) as VisualTreeAsset);
-                    }
-                }
-            }
         }
     }
 }
