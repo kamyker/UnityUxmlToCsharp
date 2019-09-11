@@ -65,12 +65,13 @@ After creating UXML right click it in Unity and select "Uxml To C#/Create C# cla
 ```
 public class TestWindow : EditorWindow
 {
-    private PageConverted page = new PageConverted();
+    private PageConverted page;
     
     private void OnEnable()
     {
         var root = rootVisualElement;
         root.Clear();
+        page = new PageConverted();
         root.AddChildrenOf(page); //extension method similar to template.CloneTree(root);
         page.TestButton1.clickable.clicked += () => Debug.Log("button1 clicked");
         page.TestButton2.clickable.clicked += () => Debug.Log("button2 clicked");
