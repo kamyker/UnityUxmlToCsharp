@@ -38,9 +38,9 @@ public class TestWindow : EditorWindow
         testButton1 = root.Q<Button>("testButton1");
         testButton2 = root.Q<Button>("testButton2");
         testButton3 = root.Q<Button>("testButton3");
-        testButton1.clickable.clicked += () => DebugLog("button1 clicked");
-        testButton2.clickable.clicked += () => DebugLog("button2 clicked");
-        testButton3.clickable.clicked += () => DebugLog("button3 clicked");
+        testButton1.clickable.clicked += () => Debug.Log("button1 clicked");
+        testButton2.clickable.clicked += () => Debug.Log("button2 clicked");
+        testButton3.clickable.clicked += () => Debug.Log("button3 clicked");
         
         root.RegisterCallback<GeometryChangedEvent>(OnWindowResized);
     }
@@ -72,9 +72,9 @@ public class TestWindow : EditorWindow
         var root = rootVisualElement;
         root.Clear();
         root.AddChildrenOf(page); //extension method similar to template.CloneTree(root);
-        page.TestButton1.clickable.clicked += () => DebugLog("button1 clicked");
-        page.TestButton2.clickable.clicked += () => DebugLog("button2 clicked");
-        page.TestButton3.clickable.clicked += () => DebugLog("button3 clicked");
+        page.TestButton1.clickable.clicked += () => Debug.Log("button1 clicked");
+        page.TestButton2.clickable.clicked += () => Debug.Log("button2 clicked");
+        page.TestButton3.clickable.clicked += () => Debug.Log("button3 clicked");
         
         root.RegisterCallback<GeometryChangedEvent>(OnWindowResized);
     }
