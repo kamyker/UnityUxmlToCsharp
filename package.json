@@ -1,0 +1,11 @@
+{
+  "name": "com.ks.uxmltocsharp",
+  "version": "1.0.0",
+  "displayName": "Uxml To C#",
+  "description": "Uxml To C#",
+  "unity": "2019.1",
+  "author": {
+    "name": "Kamil Szurant",
+    "url": "https://twitter.com/kamyker"
+  }
+}
