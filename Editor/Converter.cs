@@ -95,10 +95,7 @@ namespace KS.UxmlToCsharp
                 RecursiveFill(e, ref fields);
 
             foreach (var field in fields)
-            {
-                Debug.Log($" public {field.Value.Name} {field.Key};");
                 sb.AppendLine($"    public {field.Value.Name} {field.Key};");
-            }
 
             sb.AppendLine($"    protected override void AssignFields()");
             sb.AppendLine("    {");
