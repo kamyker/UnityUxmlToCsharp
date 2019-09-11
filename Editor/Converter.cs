@@ -21,35 +21,6 @@ namespace KS.UxmlToCsharp
         static void Create()
         {
             CreateOrUpdateClass(Selection.activeObject as VisualTreeAsset);
-
-            var path = AssetDatabase.GetAssetPath(Selection.activeObject);
-            var uxml = Selection.activeObject as VisualTreeAsset;
-            var template = uxml.CloneTree();
-
-            var strBuilder = new StringBuilder();
-            strBuilder.AppendLine("using KS.UxmlToCsharp;\n");
-            strBuilder.AppendLine("using UnityEngine.UIElements;\n");
-            strBuilder.AppendLine($"public class {uxml.name}Converted : UxmlConvertedBase");
-            strBuilder.AppendLine("{");
-            strBuilder.AppendLine($"    protected override string uxmlGuid => \"{AssetDatabase.AssetPathToGUID(path)}\";");
-
-            Dictionary<string, Type> fields = new Dictionary<string, Type>();
-            foreach (var e in template.Children())
-                RecursiveFill(e, ref fields);
-
-            foreach (var field in fields)
-                strBuilder.AppendLine($"    public {field.Value.Name} {field.Key};");
-
-            strBuilder.AppendLine($"    protected override void AssignFields()");
-            strBuilder.AppendLine("    {");
-            foreach (var field in fields)
-                strBuilder.AppendLine($"        {field.Key} = ({field.Value.Name})elementsToAssign[\"{field.Key}\"];");
-            strBuilder.AppendLine("    }");
-            strBuilder.AppendLine("}");
-
-            var pathCs = path.Replace(".uxml", "Converted.cs");
-            File.WriteAllText(pathCs, strBuilder.ToString());
-            AssetDatabase.ImportAsset(pathCs);
         }
 
         [MenuItem("Assets/Uxml To C#/Update C# class", true)]
@@ -85,41 +56,57 @@ namespace KS.UxmlToCsharp
             var sb = new StringBuilder();
             sb.AppendLine("using KS.UxmlToCsharp;");
             sb.AppendLine("using UnityEngine.UIElements;");
+            sb.AppendLine("using System.Collections.Generic;");
             sb.AppendLine();
             sb.AppendLine($"public class {uxml.name}Converted : UxmlConvertedBase");
             sb.AppendLine("{");
             sb.AppendLine($"    protected override string uxmlGuid => \"{AssetDatabase.AssetPathToGUID(path)}\";");
 
-            Dictionary<string, Type> fields = new Dictionary<string, Type>();
+            //key name, value type string
+            Dictionary<string, string> fields = new Dictionary<string, string>();
+            List<string> templates = new List<string>();
             foreach (var e in template.Children())
-                RecursiveFill(e, ref fields);
+                RecursiveFill(e, ref fields, ref templates);
 
             foreach (var field in fields)
-                sb.AppendLine($"    public {field.Value.Name} {field.Key};");
+                sb.AppendLine($"    public {field.Value} {field.Key};");
 
             sb.AppendLine($"    protected override void AssignFields()");
             sb.AppendLine("    {");
             foreach (var field in fields)
-                sb.AppendLine($"        {field.Key} = ({field.Value.Name})elementsToAssign[\"{field.Key}\"];");
+                sb.AppendLine($"        {field.Key} = ({field.Value})elementsToAssign[\"{field.Key}\"];");
             sb.AppendLine("    }");
-            sb.AppendLine("}");
 
+            if (templates.Count > 0)
+            {
+                sb.AppendLine($"    protected override void MakeTemplatesInstances(List<VisualElement> markedToDelete)");
+                sb.AppendLine("    {");
+                for (int i = 0; i < templates.Count; i++)
+                    sb.AppendLine($"        markedToDelete[{i}].ReplaceElementWithChildrenOf(new {templates[i]}());");
+                sb.AppendLine("    }");
+            }
+
+            sb.AppendLine("}");
             var pathCs = path.Replace(".uxml", "Converted.cs");
             File.WriteAllText(pathCs, sb.ToString());
             AssetDatabase.Refresh();
         }
 
-        static void RecursiveFill(VisualElement element, ref Dictionary<string, Type> fields)
+        static void RecursiveFill(VisualElement element, ref Dictionary<string, string> fields, ref List<string> templates)
         {
             if (element.customStyle.TryGetValue(new CustomStyleProperty<string>("--csName"), out string name))
             {
                 if (fields.ContainsKey(name))
                     Debug.LogError($"UXML has multiple elements with \"{name}\" --csName, only first one will be referenced");
                 else
-                    fields.Add(name, element.GetType());
+                    fields.Add(name, element.GetType().Name);
             }
+
+            if (element.customStyle.TryGetValue(new CustomStyleProperty<string>("--csTemplate"), out string template))
+                templates.Add(template);
+
             foreach (var item in element.Children())
-                RecursiveFill(item, ref fields);
+                RecursiveFill(item, ref fields, ref templates);
         }
     }
 }

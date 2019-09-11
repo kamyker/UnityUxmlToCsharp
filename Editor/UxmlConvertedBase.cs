@@ -25,6 +25,26 @@ namespace KS.UxmlToCsharp
                 RecursiveFromStyle(e, ref elementsToAssign);
 
             AssignFields();
+            CloneTemplates();
+        }
+
+        private void CloneTemplates()
+        {
+            //cache this so it won't die?
+            var markedToDelete = new List<VisualElement>();
+            foreach (var e in Root.Children())
+                RecursiveGetTemplatesWithParents(e, ref markedToDelete);
+            MakeTemplatesInstances(markedToDelete);
+        }
+
+        protected virtual void MakeTemplatesInstances(List<VisualElement> markedToDelete) { }
+
+        private void RecursiveGetTemplatesWithParents(VisualElement e, ref List<VisualElement> markedToDelete)
+        {
+            if (e.customStyle.TryGetValue(new CustomStyleProperty<string>("--csTemplate"), out string template))
+                markedToDelete.Add(e);
+            foreach (var item in e.Children())
+                RecursiveGetTemplatesWithParents(item, ref markedToDelete);
         }
 
         protected abstract void AssignFields();
