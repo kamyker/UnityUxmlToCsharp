@@ -71,7 +71,7 @@ public class TestWindow : EditorWindow
     {
         var root = rootVisualElement;
         root.Clear();
-        root.AddChildren(page); //extension method similar to template.CloneTree(root);
+        root.AddChildrenOf(page); //extension method similar to template.CloneTree(root);
         page.TestButton1.clickable.clicked += () => DebugLog("button1 clicked");
         page.TestButton2.clickable.clicked += () => DebugLog("button2 clicked");
         page.TestButton3.clickable.clicked += () => DebugLog("button3 clicked");
