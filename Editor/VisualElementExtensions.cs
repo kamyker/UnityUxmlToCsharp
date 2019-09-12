@@ -19,13 +19,6 @@ namespace KS.UxmlToCsharp
 
         public static void ReplaceElementWithChildrenOf<T>(this VisualElement el, T withChildren) where T : UxmlConvertedBase
         {
-            foreach (var child in el.hierarchy.parent.Children())
-            {
-                Debug.Log(child.name);
-            }
-            //somehow this doesnt work, bug?
-            //int templateIndex = el.hierarchy.IndexOf(el);
-
             int templateIndex = el.parent.IndexOf(el);
             VisualElement parent = el.parent;
             var children = withChildren.Root.Children().ToList();
