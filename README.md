@@ -159,5 +159,14 @@ public class TestWindow : EditorWindow
         root.Clear();
         root.AddChildrenOf(new TriplePagesConverted());
     }
+    
+    [MenuItem("TestWindow/Open")]
+    private static void Open()
+    {
+        var window = GetWindow<TestWindow>();
+        window.Show();
+    }
 }
 ```
+Here's our final result:
+![window](/Documentation~/img.png)
