@@ -99,7 +99,7 @@ Have you read about [UXML Templates](https://docs.unity3d.com/Manual/UIE-Writing
 ### Example:
 We are going to convert PageConverted to standalone solution and show it 3 times instead of 1 like in previous example.
 **Page.uxml**\
-This file stays the same, remember to also generate C# class from example above
+This file stays the same, remember to also generate C# class (like in the example above)
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <UXML
