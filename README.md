@@ -89,6 +89,75 @@ public class TestWindow : EditorWindow
 
 As you can see you no longer have to use Q method and load specific uxml template as it all happens in `new PageConverted()`.
 
-## Important:
+## Important
 1. Converted class will be automatically updated every time uxml is changed IF they are both placed in the same folder.
 2. If above is not an option and you want to move it to different folder you can manually update generated class with RMB and "Uxml To C#/Update C# class". It works as it has hardcoded guid to uxml file.
+
+## Templates
+Have you read about [UXML Templates](https://docs.unity3d.com/Manual/UIE-WritingUXMLTemplate.html)? This project supports something similar. Simply add `"style="--csTemplate: PageConverted;"` custom style. Whole object with this style will be replace with the template. What's interesting is that you can extend PageConverted, add custom logic and still use it the same way! This makes parts of your UI properly decoupled.
+
+### Example:
+We are going to convert PageConverted to standalone solution and show it 3 times instead of 1 like in previous example.
+**Page.uxml**
+This file stays the same, remember to also generate C# class from example above
+```
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xsi:noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+    xsi:schemaLocation="UnityEngine.UIElements ../UIElementsSchema/UnityEngine.UIElements.xsd">
+  <Box>
+    <Button style="--csName: TestButton1;"/>
+    <Button style="--csName: TestButton2;"/>
+    <Button style="--csName: TestButton3;"/>
+  </Box>
+</UXML>
+```
+**PageConvertedExtended.cs**
+Here we are going to add logic to our converted uxml.
+```
+public class PageConvertedExtended : PageConverted
+{
+    private void PageConvertedExtended() //PageConverted constructor is called before this
+    {
+        TestButton1.clickable.clicked += () => Debug.Log("button1 clicked");
+        TestButton2.clickable.clicked += () => Debug.Log("button2 clicked");
+        TestButton3.clickable.clicked += () => Debug.Log("button3 clicked");
+        
+        TestButton1.RegisterCallback<GeometryChangedEvent>(OnWindowResized);
+    }
+    
+    private void OnWindowResized(GeometryChangedEvent window)
+    {
+        //using TestButton1, TestButton2, TestButton3 here
+    }
+}
+```
+**TriplePages.uxml**
+Page with templates
+```
+<?xml version="1.0" encoding="utf-8"?>
+<UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="UnityEngine.UIElements"
+    xsi:noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
+    xsi:schemaLocation="UnityEngine.UIElements ../UIElementsSchema/UnityEngine.UIElements.xsd">
+  <Box style="--csTemplate: PageConvertedExtended;>
+  <Box style="--csTemplate: PageConvertedExtended;>
+  <Box style="--csTemplate: PageConvertedExtended;>
+</UXML>
+```
+Create C# class from this uxml and it's done. Now you can add TriplePagesConverted or PageConvertedExtended to whatever you want.
+**TestWindow.cs**
+```
+public class TestWindow : EditorWindow
+{
+    private void OnEnable()
+    {
+        var root = rootVisualElement;
+        root.Clear();
+        root.AddChildrenOf(new TriplePagesConverted());
+    }
+}
+```
