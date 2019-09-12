@@ -98,7 +98,7 @@ Have you read about [UXML Templates](https://docs.unity3d.com/Manual/UIE-Writing
 
 ### Example:
 We are going to convert PageConverted to standalone solution and show it 3 times instead of 1 like in previous example.
-**Page.uxml**
+**Page.uxml**\
 This file stays the same, remember to also generate C# class from example above
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -114,7 +114,7 @@ This file stays the same, remember to also generate C# class from example above
   </Box>
 </UXML>
 ```
-**PageConvertedExtended.cs**
+**PageConvertedExtended.cs**\
 Here we are going to add logic to our converted uxml.
 ```
 public class PageConvertedExtended : PageConverted
@@ -134,7 +134,7 @@ public class PageConvertedExtended : PageConverted
     }
 }
 ```
-**TriplePages.uxml**
+**TriplePages.uxml**\
 Page with templates
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -148,7 +148,7 @@ Page with templates
   <Box style="--csTemplate: PageConvertedExtended;>
 </UXML>
 ```
-Create C# class from this uxml and it's done. Now you can add TriplePagesConverted or PageConvertedExtended to whatever you want.
+Create C# class from this uxml and it's done. Now you can add TriplePagesConverted or PageConvertedExtended to whatever you want.\
 **TestWindow.cs**
 ```
 public class TestWindow : EditorWindow
