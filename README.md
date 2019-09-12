@@ -143,9 +143,9 @@ Page with templates
     xmlns="UnityEngine.UIElements"
     xsi:noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd"
     xsi:schemaLocation="UnityEngine.UIElements ../UIElementsSchema/UnityEngine.UIElements.xsd">
-  <Box style="--csTemplate: PageConvertedExtended;>
-  <Box style="--csTemplate: PageConvertedExtended;>
-  <Box style="--csTemplate: PageConvertedExtended;>
+  <Box style="--csTemplate: PageConvertedExtended;">
+  <Box style="--csTemplate: PageConvertedExtended;">
+  <Box style="--csTemplate: PageConvertedExtended;">
 </UXML>
 ```
 Create C# class from this uxml and it's done. Now you can add TriplePagesConverted or PageConvertedExtended to whatever you want.\
