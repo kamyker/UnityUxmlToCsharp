@@ -94,7 +94,7 @@ As you can see you no longer have to use Q method and load specific uxml templat
 2. If above is not an option and you want to move it to different folder you can manually update generated class with RMB and "Uxml To C#/Update C# class". It works as class has hardcoded guid to uxml file.
 
 # Templates
-Have you read about [UXML Templates](https://docs.unity3d.com/Manual/UIE-WritingUXMLTemplate.html)? This project supports something similar. Simply add `"style="--csTemplate: PageConverted;"` custom style. Whole object with this style will be replace with the template. What's interesting is that you can extend PageConverted, add custom logic and still use it the same way! This makes parts of your UI properly decoupled.
+Have you read about [UXML Templates](https://docs.unity3d.com/Manual/UIE-WritingUXMLTemplate.html)? This project supports something similar. Simply add `"style="--csTemplate: <name-of-converted-uxml>;"` custom style. Whole object with this parameter will be replaced with the template. What's interesting is that you can extend your converted uxml class, add custom logic and still use it the same way! This makes parts of your UI properly decoupled.
 
 ### Example:
 We are going to convert PageConverted to standalone solution and show it 3 times instead of 1 like in previous example.
