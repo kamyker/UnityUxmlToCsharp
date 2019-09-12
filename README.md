@@ -2,6 +2,12 @@
 
 Plugin that generates helper C# classes based on uxml files in Unity. It may be considered as a very simple and automatic alternative to [UxmlFactory](https://docs.unity3d.com/Manual/UIE-UXML.html).
 
+## Installation:
+**Easy way:**\
+Add `"com.ks.uxmltocsharp": "https://github.com/kamyker/UnityUxmlToCsharp.git"` to `<your_project>/Packages/manifest.json` dependencies\
+**Git way:**\
+Clone repo as submodule to `<your_project>/Packages/UxmlToCsharp`
+
 ## Quick example
 Let's make a panel with 3 buttons. Their actions have to be assigned in C#. Additional we will hide them when window is too small.
 
